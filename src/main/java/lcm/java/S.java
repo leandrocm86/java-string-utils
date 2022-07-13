@@ -74,19 +74,17 @@ public class S implements CharSequence {
     /* BEGIN OF UTILITY METHODS */
 
     /**
-     * Formats a text using each ocurrence of "--" as a placeholder.
+     * Formats a text using each occurrence of "--" as a placeholder.
      * The parameters given replace each placeholder in sequence.
      * It is possible to pass a single value to replace all placeholders.
      * But if more than one value is passed, the number of values must match the number of placeholders.
      * @param text The text to format.
      * @param parameters The parameters to replace each placeholder.
      * @throws IllegalArgumentException If there is more than one parameter, but less than the number of placeholders.
-     * @see java.lang.String#changeFirst(java.lang.String, java.lang.String)
      */
-    public static S f(CharSequence text, Object... args) {
-        if (args.length == 0) {
+    public static String f(CharSequence text, Object... args) {
+        if (args.length == 0)
             throw new IllegalArgumentException("No arguments provided to format string.");
-        }
         S in = new S(text);
         if (args.length > 1 && in.count("--") != args.length) {
             String errorMsg = """
@@ -95,15 +93,14 @@ public class S implements CharSequence {
             throw new IllegalArgumentException(errorMsg);
         }
         S out = new S(text);
-        if (args.length == 1) {
-            return out.change("--", String.valueOf(args[0]));
-        }
+        if (args.length == 1)
+            return out.change("--", String.valueOf(args[0])).toString();
 		int trocas = 0;
 		while (trocas < args.length) {
             out.changeFirst("--", String.valueOf(args[trocas].toString()));
 			trocas++;
 		}
-        return out;
+        return out.toString();
     }
 
     /**
@@ -117,7 +114,7 @@ public class S implements CharSequence {
 
     /**
      * Mutable version of the replaceFirst method.
-     * Replaces the first ocurrence of the given substring with the given replacement.
+     * Replaces the first occurrence of the given substring with the given replacement.
      * @param oldSubstring The substring to be replaced.
      * @param newSubstring The substring to replace the old one.
      * @return The same S object, that now has a new value.
@@ -130,7 +127,7 @@ public class S implements CharSequence {
 
     /**
      * Mutable version of the replace method.
-     * Replaces the value of all ocurrences of the given substring with the given replacement.
+     * Replaces the value of all occurrences of the given substring with the given replacement.
      * @param oldSubstring The substring to be replaced.
      * @param newSubstring The substring to replace the old one.
      * @return The same S object, that now has a new value.
@@ -139,6 +136,200 @@ public class S implements CharSequence {
     public S change(CharSequence oldSubstring, CharSequence newSubstring) {
         val = val.replace(String.valueOf(oldSubstring), String.valueOf(newSubstring));
         return this;
+    }
+
+    /**
+     * Mutable version of the concat method from native String.
+     * Concatenates the given string to the end of the current one.
+     * An optional separator can be passed to be appended between the two strings.
+     * @param separator Optional separator to be appended between the strings.
+     * @param string The string to be concatenated.
+     * @param suffix Optional suffix to be appended after the resulting string.
+     * @return The same S object, that now has a new value.
+    */
+    public S add(CharSequence seperator, Object string, CharSequence suffix) {
+        if (seperator != null)
+            val += seperator;
+        val += string;
+        if (suffix != null)
+            val += suffix;
+        return this;
+    }
+
+    /**
+     * Overload of the add method without a separator or suffix.
+     * @see #add(CharSequence, Object, CharSequence)
+     */
+    public S add(Object string) {
+        return this.add(null, string, null);
+    }
+
+    /**
+     * Overload of the add method with space as suffix.
+     * @see #add(CharSequence, Object, CharSequence)
+     */
+    public S adds(Object string) {
+        return this.add(null, string, " ");
+    }
+
+    /**
+     * Overload of the add method with space as separator.
+     * @see #add(CharSequence, Object, CharSequence)
+     */
+    public S sadd(Object string) {
+        return this.add(" ", string, null);
+    }
+
+    /**
+     * Overload of the add method with a new line as suffix.
+     * @see #add(CharSequence, Object, CharSequence)
+     */
+    public S addln(Object string) {
+        return this.add(null, string, "\n");
+    }
+
+    /**
+     * Overload of the add method with a new line as separator.
+     * @see #add(CharSequence, Object, CharSequence)
+     */
+    public S lnadd(Object string) {
+        return this.add("\n", string, null);
+    }
+
+    /**
+     * Returns a string starting after the given substring until the end.
+     * If the optional ocurrence is given, it returns the string starting from the Nth occurrence of the substring.
+     * @param substring The starting substring from which the return is extracted.
+     * @param occurrence The Nth occurrence of the substring from which the return is extracted.
+     */
+    public S from(CharSequence start, Integer occurrence) {
+        int index = val.indexOf(start.toString(), 0);
+        if (index == -1)
+            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", start, val));
+        if (occurrence == null)
+            return new S(val.substring(index + start.length()));
+        else {
+            if (occurrence < 1)
+                throw new IllegalArgumentException("Ocurrence must be greater than 0.");
+            int count = 1;
+            while (count < occurrence) {
+                index = val.indexOf(start.toString(), index + 1);
+                if (index == -1)
+                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, start, val));
+                count++;
+            }
+            return new S(val.substring(index + start.length()));
+        }
+    }
+
+    /**
+     * Returns a string starting after the given substring until the end.
+     * @param substring The starting substring from which the return is extracted.
+     */
+    public S from(CharSequence start) {
+        return this.from(start, null);
+    }
+
+    /**
+     * Returns a string starting from the beginning and ending on the given substring.
+     * If the optional ocurrence is given, it returns the string ending on the Nth occurrence of the substring.
+     * @param substring The ending substring up to which the return is extracted.
+     * @param occurrence The Nth occurrence of the substring up to which the return is extracted.
+     */
+    public S until(CharSequence end, Integer occurrence) {
+        int index = val.indexOf(end.toString(), 0);
+        if (index == -1)
+            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", end, val));
+        if (occurrence == null)
+            return new S(val.substring(0, index));
+        else {
+            if (occurrence < 1)
+                throw new IllegalArgumentException("Ocurrence must be greater than 0.");
+            int count = 1;
+            while (count < occurrence) {
+                index = val.indexOf(end.toString(), index + 1);
+                if (index == -1)
+                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, end, val));
+                count++;
+            }
+            return new S(val.substring(0, index));
+        }
+    }
+
+    /**
+     * Returns a string starting from the begining and ending in the given substring.
+     * @param substring The ending substring up to which the return is extracted.
+     */
+    public S until(CharSequence end) {
+        return this.until(end, null);
+    }
+
+    /**
+     * Returns a string starting from the given substring (inclusive) until the end.
+     * If the optional ocurrence is given, it returns the string starting from the Nth occurrence of the substring.
+     * @param substring The starting substring from which the return is extracted (including this start).
+     * @param occurrence The Nth occurrence of the substring from which the return is extracted.
+     */
+    public S frominc(CharSequence start, Integer occurrence) {
+        int index = val.indexOf(start.toString(), 0);
+        if (index == -1)
+            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", start, val));
+        if (occurrence == null)
+            return new S(val.substring(index));
+        else {
+            if (occurrence < 1)
+                throw new IllegalArgumentException("Ocurrence must be greater than 0.");
+            int count = 1;
+            while (count < occurrence) {
+                index = val.indexOf(start.toString(), index + 1);
+                if (index == -1)
+                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, start, val));
+                count++;
+            }
+            return new S(val.substring(index));
+        }
+    }
+
+    /**
+     * Returns a string starting from the given substring (inclusive) until the end.
+     * @param substring The starting substring from which the return is extracted (including this start).
+     */
+    public S frominc(CharSequence start) {
+        return this.frominc(start, null);
+    }
+
+    /**
+     * Returns a string starting from 0 and ending after the given substring.
+     * If the optional ocurrence is given, it returns the string ending on the Nth occurrence of the substring.
+     * @param substring The ending substring up to which the return is extracted (including this end).
+     * @param occurrence The Nth occurrence of the substring up to which the return is extracted.
+     */
+    public S untilinc(CharSequence end, Integer occurrence) {
+        int index = val.indexOf(end.toString(), 0);
+        if (index == -1)
+            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", end, val));
+        if (occurrence == null)
+            return new S(val.substring(0, index + end.length()));
+        else {
+            if (occurrence < 1)
+                throw new IllegalArgumentException("Ocurrence must be greater than 0.");
+            int count = 1;
+            while (count < occurrence) {
+                index = val.indexOf(end.toString(), index + 1);
+                if (index == -1)
+                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, end, val));
+                count++;
+            }
+            return new S(val.substring(0, index + end.length()));
+        }
+    }
+
+    /**
+     * Returns a string starting from 0 and ending after the given substring.
+     * @param substring The ending substring up to which the return is extracted, including this end.
+     */
+    public S untilinc(CharSequence end) {
+        return this.untilinc(end, null);
     }
 
     /* END OF UTILITY METHODS */

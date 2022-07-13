@@ -46,4 +46,76 @@ public class SubstringTests {
         assertEquals("acdefxxxdefxxx", result.toString());
     }
 
+    @Test
+    void testFrom() {
+        S s = new S("acdefabcdefabc");
+        S result = s.from("abc");
+        assertEquals("acdefabcdefabc", s.toString());
+        assertEquals("defabc", result.toString());
+    }
+
+    @Test
+    void testFromNth() {
+        S s = new S("abcdefabcdefabc");
+        S result = s.from("abc", 2);
+        S result2 = s.from("abc", 3);
+        assertEquals("abcdefabcdefabc", s.toString());
+        assertEquals("defabc", result.toString());
+        assertEquals("", result2.toString());
+    }
+
+    @Test
+    void testFrominc() {
+        S s = new S("acdefabcdefabc");
+        S result = s.frominc("abc");
+        assertEquals("acdefabcdefabc", s.toString());
+        assertEquals("abcdefabc", result.toString());
+    }
+
+    @Test
+    void testFromincNth() {
+        S s = new S("abcdefabcdefabc");
+        S result = s.frominc("abc", 2);
+        S result2 = s.frominc("abc", 3);
+        assertEquals("abcdefabcdefabc", s.toString());
+        assertEquals("abcdefabc", result.toString());
+        assertEquals("abc", result2.toString());
+    }
+
+    @Test
+    void testUntil() {
+        S s = new S("abcdefabcdefabc");
+        S result = s.until("abc");
+        assertEquals("abcdefabcdefabc", s.toString());
+        assertEquals("", result.toString());
+    }
+
+    @Test
+    void testUntilNth() {
+        S s = new S("abcdefabcdefabc");
+        S result = s.until("abc", 2);
+        S result2 = s.until("abc", 3);
+        assertEquals("abcdefabcdefabc", s.toString());
+        assertEquals("abcdef", result.toString());
+        assertEquals("abcdefabcdef", result2.toString());
+    }
+
+    @Test
+    void testUntilinc() {
+        S s = new S("abcdefabcdefabc");
+        S result = s.untilinc("abc");
+        assertEquals("abcdefabcdefabc", s.toString());
+        assertEquals("abc", result.toString());
+    }
+
+    @Test
+    void testUntilincNth() {
+        S s = new S("abcdefabcdefabc");
+        S result = s.untilinc("abc", 2);
+        S result2 = s.untilinc("abc", 3);
+        assertEquals("abcdefabcdefabc", s.toString());
+        assertEquals("abcdefabc", result.toString());
+        assertEquals("abcdefabcdefabc", result2.toString());
+    }
+
 }

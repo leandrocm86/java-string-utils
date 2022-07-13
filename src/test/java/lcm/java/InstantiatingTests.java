@@ -28,9 +28,9 @@ public class InstantiatingTests {
 
     @Test
     void testF() {
-        S s = S.f("Hello --! Hello --! These are -- hellos!", "World", "Galaxy", 2);
-        assertEquals("Hello World! Hello Galaxy! These are 2 hellos!", s.toString());
+        String s = S.f("Hello --! Hello --! These are -- hellos!", "World", "Galaxy", 2);
+        assertEquals("Hello World! Hello Galaxy! These are 2 hellos!", s);
         s = S.f("Hello --! I love this --!", "World");
-        assertEquals("Hello World! I love this World!", s.toString());
+        assertEquals("Hello World! I love this World!", s);
     }
 }
