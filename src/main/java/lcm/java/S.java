@@ -1,5 +1,7 @@
 package lcm.java;
 
+import java.util.Collection;
+
 public class S implements CharSequence {
     private String val;
     
@@ -11,6 +13,14 @@ public class S implements CharSequence {
     
     public S(Object o) {
         this.val = String.valueOf(o);
+    }
+
+    public static S[] wrap(String[] strings) {
+        S[] result = new S[strings.length];
+        for (int i = 0; i < strings.length; i++) {
+            result[i] = new S(strings[i]);
+        }
+        return result;
     }
     
     /* END OF CONSTRUCTORS */
@@ -26,34 +36,48 @@ public class S implements CharSequence {
         return val.equals(s);
     }
 
+    @Override
+    public int hashCode() {
+		return val.hashCode();
+	}
+
+    @Override
+    public String toString() {
+        return val;
+    }
+
     /* END OF OBJECT METHODS */
     
 
     /* BEGIN OF CHARSEQUENCE METHODS */
     
+    /**
+     * @see java.lang.CharSequence#length()
+     */
+    @Override
     public int length() {
         return val.length();
     }
     
+    /**
+     * @see java.lang.CharSequence#charAt(int)
+     */
     public char charAt(int index) {
         return val.charAt(index);
     }
     
+    /**
+     * @see java.lang.CharSequence#subSequence(int, int)
+     */
     public CharSequence subSequence(int start, int end) {
-        return val.subSequence(start, end);
+        return new S(val.subSequence(start, end));
     }
     
-    public String toString() {
-        return val;
-    }
-
     /* END OF CHARSEQUENCE METHODS */
 
     /* BEGIN OF REGULAR STRING METHODS */
 
     /**
-     * Implementation of the original replaceFirst method from native String.
-     * Wraps the return in a S object.
      * @see java.lang.String#replaceFirst(java.lang.String, java.lang.String)
      */
     public S replaceFirst(CharSequence oldSubstring, CharSequence newSubstring) {
@@ -61,12 +85,108 @@ public class S implements CharSequence {
     }
 
     /**
-     * Implementation of the original replace method from native String.
-     * Wraps the return in a S object.
      * @see java.lang.String#replace(java.lang.String, java.lang.String)
      */
     public S replace(CharSequence oldSubstring, CharSequence newSubstring) {
         return new S(val.replace(String.valueOf(oldSubstring), String.valueOf(newSubstring)));
+    }
+
+    /**
+     * @see java.lang.String#compareTo(java.lang.String)
+     */
+    public int compareTo(CharSequence anotherString) {
+		return val.compareTo(anotherString.toString());
+	}
+
+    /**
+     * @see java.lang.String#compareToIgnoreCase(java.lang.String)
+     */
+	public int compareToIgnoreCase(CharSequence str) {
+		return val.compareToIgnoreCase(str.toString());
+	}
+
+    /**
+     * @see java.lang.String#contains(java.lang.CharSequence)
+     */
+	public boolean contains(CharSequence s) {
+		return val.contains(s.toString());
+	}
+
+    /**
+     * @see java.lang.String#endsWith(java.lang.String)
+     */
+	public boolean endsWith(CharSequence suffix) {
+		return val.endsWith(suffix.toString());
+	}
+
+    /**
+     * @see java.lang.String#equalsIgnoreCase(java.lang.String)
+     */
+	public boolean equalsIgnoreCase(CharSequence anotherString) {
+		return val.equalsIgnoreCase(anotherString.toString());
+	}
+
+    /**
+     * @see java.lang.String#indexOf(String)
+     */
+	public int indexOf(CharSequence str) {
+		return val.indexOf(str.toString());
+	}
+
+    /**
+     * @see java.lang.String#indexOf(String, int)
+     */
+	public int indexOf(CharSequence str, int fromIndex) {
+		return val.indexOf(str.toString(), fromIndex);
+	}
+
+    /**
+     * @see java.lang.String#isBlank()
+     */
+	public boolean isBlank() {
+		return val.isBlank();
+	}
+
+    /**
+     * @see java.lang.String#lastIndexOf(String)
+     */
+	public int lastIndexOf(CharSequence str) {
+		return val.lastIndexOf(str.toString());
+	}
+
+    /**
+     * @see java.lang.String#matches(java.lang.String)
+     */
+	public boolean matches(CharSequence regex) {
+		return val.matches(regex.toString());
+	}
+
+    /**
+     * @see java.lang.String#split(java.lang.String)
+     */
+	public S[] split(CharSequence regex) {
+		return wrap(val.split(regex.toString()));
+	}
+
+    /**
+     * @see java.lang.String#startsWith(java.lang.String)
+     */
+	public boolean startsWith(CharSequence prefix) {
+		return val.startsWith(prefix.toString());
+	}
+
+    /**
+     * @see java.lang.String#toLowerCase()
+     */
+	public S toLowerCase() {
+		return new S(val.toLowerCase());
+	}
+
+    /**
+     * @see java.lang.String#trim()
+     */
+    public S trim() {
+        return new S(val.trim());
     }
 
     /* END OF REGULAR STRING METHODS */  
@@ -104,6 +224,43 @@ public class S implements CharSequence {
     }
 
     /**
+     * Returns true if the string is empty or null.
+     */
+	public static boolean blank(CharSequence str) {
+		return str == null || str.toString().isBlank();
+	}
+
+    /**
+     * Mutable method.
+     * Changes the string to lower case.
+     * @return The same S object, now in lower case.
+     */
+    public S lower() {
+        val = val.toLowerCase();
+        return this;
+    }
+
+    /**
+     * Mutable method.
+     * Changes the string to upper case.
+     * @return The same S object, now in upper case.
+     */
+    public S upper() {
+        val = val.toUpperCase();
+        return this;
+    }
+
+    /**
+     * Mutable version of the trim method from the native String class.
+     * @see java.lang.String#trim()
+     * @return The same S object, now trimmed.
+     */
+    public S strip() {
+        val = val.trim();
+        return this;
+    }
+
+    /**
      * Counts the number of occurrences of a substring in a string.
      * @param s The substring to be counted.
      * @return The number of occurrences of the substring in the string.
@@ -136,6 +293,16 @@ public class S implements CharSequence {
     public S change(CharSequence oldSubstring, CharSequence newSubstring) {
         val = val.replace(String.valueOf(oldSubstring), String.valueOf(newSubstring));
         return this;
+    }
+
+    /**
+     * Mutable method.
+     * Replaces the whole current string value with the given string.
+     * If the given string is null, the empty string ("") is used. S is always null-safe.
+     * @return The same S object, that now has a new value.
+     */
+    public void substitute(String s) {
+        val = s != null ? s : "";
     }
 
     /**
@@ -331,6 +498,51 @@ public class S implements CharSequence {
     public S untilinc(CharSequence end) {
         return this.untilinc(end, null);
     }
+
+    /**
+     * Returns wether the string is equal to any of the given values.
+     */
+    public boolean in(CharSequence... strings) {
+        for (CharSequence string : strings) {
+            if (this.equals(string))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns wether the string is equal to any of the values in a given collection.
+     */
+    public boolean in(Collection<CharSequence> strings) {
+        for (CharSequence string : strings) {
+            if (this.equals(string))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns wether the string is different than all the given values.
+     */
+    public boolean none(CharSequence... strings) {
+        for (CharSequence string : strings) {
+            if (this.equals(string))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns wether the string is different than all the values in a given collection.
+     */
+    public boolean none(Collection<CharSequence> strings) {
+        for (CharSequence string : strings) {
+            if (this.equals(string))
+                return false;
+        }
+        return true;
+    }
+
 
     /* END OF UTILITY METHODS */
 }

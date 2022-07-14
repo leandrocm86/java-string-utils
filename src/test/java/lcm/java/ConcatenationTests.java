@@ -48,4 +48,5 @@ public class ConcatenationTests {
         S s3 = s.lnadd(s2);
         assert s3.equals("Hello\nWorld") && s3 == s;
     }
+
 }
