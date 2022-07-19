@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>lcm.java</groupId>
   <artifactId>string-utils</artifactId>
-  <version>0.2</version>
+  <version>1.0-SNAPSHOT</version>
   <properties>
     <maven.compiler.source>1.17</maven.compiler.source>
     <maven.compiler.target>1.17</maven.compiler.target>
@@ -28,14 +28,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0-M5</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
-        <configuration>
-            <release>17</release>
-        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -12,10 +12,11 @@ public class BooleanTests {
     }
 
     @Test
-    void testNone() {
-        S s = new S("Hello");
-        assert s.none("World", "Beyond");
-        assert !s.none("World", "Hello");
+    void testEquals() {
+    	S s1 = new S("Hello");
+    	S s2 = new S("Hello");
+    	assert s1.equals(s2);
+    	assert s1.equals("Hello");
     }
     
 }

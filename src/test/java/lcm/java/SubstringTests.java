@@ -29,6 +29,12 @@ public class SubstringTests {
         assertEquals("acdefxxxdefabc", s.toString());
         assertEquals("acdefxxxdefabc", result.toString());
     }
+    
+    @Test
+    void indexOfNth() {
+    	S s = new S("acdefabcdefabcdef");
+    	assertEquals(8, s.indexOfNth("def", 2));
+    }
 
     @Test
     void testReplace() {

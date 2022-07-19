@@ -1,14 +1,31 @@
 package lcm.java;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 public class SubstitutionTests {
 
     @Test
-    void testSubstitute() {
+    void testSubstitution() {
         S s = new S("Hello");
-        s.substitute("world");
+        s.change("world");
         assert s.equals("world");
+    }
+    
+    @Test
+    void testChange() {
+    	 S s = new S("HelloabcHelloabcHello");
+    	 S s2 = s.change("abc", "x");
+    	 assert s.equals("HelloxHelloxHello") && s == s2;
+    }
+    
+    @Test
+    void testChangeAll() {
+    	S s = new S("Hello    Hello\n");
+    	S s2 = s.changeAll("\\s+", " ");
+    	assert s == s2;
+    	assertEquals("Hello Hello ", s.toString());
     }
 
     @Test

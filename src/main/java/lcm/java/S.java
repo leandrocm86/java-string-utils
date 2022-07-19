@@ -2,6 +2,14 @@ package lcm.java;
 
 import java.util.Collection;
 
+/**
+ * The S class is a wrapper for strings that adds many common utility methods.
+ * It tries to act like a decorator to be used interchangeably with native String by implementing CharSequence.
+ * It's nullsafe (wraps empty string if null value is given).
+ * It's mutable (unlike native String, some methods allow the object to change its inner value).
+ * 
+ * @author Leandro Medeiros
+ */
 public class S implements CharSequence {
     private String val;
     
@@ -25,11 +33,11 @@ public class S implements CharSequence {
     
     /* END OF CONSTRUCTORS */
 
-    /* BEGIN OBJECT METHODS */
+    /* BEGIN OF OBJECT METHODS */
 
     @Override
     public boolean equals(Object o) {
-        return val.equals(o);
+        return val.equals(String.valueOf(o));
     }
 
     public boolean equals(String s) {
@@ -62,6 +70,7 @@ public class S implements CharSequence {
     /**
      * @see java.lang.CharSequence#charAt(int)
      */
+    @Override
     public char charAt(int index) {
         return val.charAt(index);
     }
@@ -69,8 +78,17 @@ public class S implements CharSequence {
     /**
      * @see java.lang.CharSequence#subSequence(int, int)
      */
+    @Override
     public CharSequence subSequence(int start, int end) {
         return new S(val.subSequence(start, end));
+    }
+    
+    /**
+     * @see java.lang.CharSequence#subSequence(int, int)
+     * @see java.lang.String#substring(int)
+     */
+    public CharSequence subSequence(int start) {
+        return new S(val.subSequence(start, val.length()));
     }
     
     /* END OF CHARSEQUENCE METHODS */
@@ -90,6 +108,13 @@ public class S implements CharSequence {
     public S replace(CharSequence oldSubstring, CharSequence newSubstring) {
         return new S(val.replace(String.valueOf(oldSubstring), String.valueOf(newSubstring)));
     }
+    
+    /**
+     * @see java.lang.String#replace(java.lang.String, java.lang.String)
+     */
+	public S replaceAll(String regex, CharSequence replacement) {
+		return new S(val.replaceAll(regex, replacement.toString()));
+	}
 
     /**
      * @see java.lang.String#compareTo(java.lang.String)
@@ -125,6 +150,20 @@ public class S implements CharSequence {
 	public boolean equalsIgnoreCase(CharSequence anotherString) {
 		return val.equalsIgnoreCase(anotherString.toString());
 	}
+	
+    /**
+     * @see java.lang.String#indexOf(int)
+     */
+	public int indexOf(int ch) {
+		return val.indexOf(ch);
+	}
+	
+    /**
+     * @see java.lang.String#indexOf(int, int)
+     */
+	public int indexOf(int ch, int fromIndex) {
+		return val.indexOf(ch, fromIndex);
+	}
 
     /**
      * @see java.lang.String#indexOf(String)
@@ -148,10 +187,31 @@ public class S implements CharSequence {
 	}
 
     /**
+     * @see java.lang.String#lastIndexOf(int)
+     */
+	public int lastIndexOf(int ch) {
+		return val.lastIndexOf(ch);
+	}
+	
+    /**
+     * @see java.lang.String#lastIndexOf(int, int)
+     */
+	public int lastIndexOf(int ch, int fromIndex) {
+		return val.lastIndexOf(ch, fromIndex);
+	}
+	
+    /**
      * @see java.lang.String#lastIndexOf(String)
      */
 	public int lastIndexOf(CharSequence str) {
 		return val.lastIndexOf(str.toString());
+	}
+	
+    /**
+     * @see java.lang.String#lastIndexOf(String, int)
+     */
+	public int lastIndexOf(CharSequence str, int fromIndex) {
+		return val.lastIndexOf(str.toString(), fromIndex);
 	}
 
     /**
@@ -180,6 +240,13 @@ public class S implements CharSequence {
      */
 	public S toLowerCase() {
 		return new S(val.toLowerCase());
+	}
+	
+    /**
+     * @see java.lang.String#toUpperCase()
+     */
+	public S toUpperCase() {
+		return new S(val.toUpperCase());
 	}
 
     /**
@@ -222,11 +289,11 @@ public class S implements CharSequence {
 		}
         return out.toString();
     }
-
+   
     /**
      * Returns true if the string is empty or null.
      */
-	public static boolean blank(CharSequence str) {
+	public static boolean isBlank(String str) {
 		return str == null || str.toString().isBlank();
 	}
 
@@ -270,16 +337,13 @@ public class S implements CharSequence {
     }
 
     /**
-     * Mutable version of the replaceFirst method.
-     * Replaces the first occurrence of the given substring with the given replacement.
-     * @param oldSubstring The substring to be replaced.
-     * @param newSubstring The substring to replace the old one.
+     * Mutable method.
+     * Replaces the whole current string value with the given string.
+     * If the given string is null, the empty string ("") is used. S is always null-safe.
      * @return The same S object, that now has a new value.
-     * @see #replaceFirst(CharSequence, CharSequence)
      */
-    public S changeFirst(CharSequence oldSubstring, CharSequence newSubstring) {
-        val = val.replaceFirst(String.valueOf(oldSubstring), String.valueOf(newSubstring));
-        return this;
+    public void change(String s) {
+        val = s != null ? s : "";
     }
 
     /**
@@ -294,21 +358,36 @@ public class S implements CharSequence {
         val = val.replace(String.valueOf(oldSubstring), String.valueOf(newSubstring));
         return this;
     }
-
+    
     /**
-     * Mutable method.
-     * Replaces the whole current string value with the given string.
-     * If the given string is null, the empty string ("") is used. S is always null-safe.
+     * Mutable version of the replaceFirst method.
+     * Replaces the first occurrence of the given substring with the given replacement.
+     * @param oldSubstring The substring to be replaced.
+     * @param newSubstring The substring to replace the old one.
      * @return The same S object, that now has a new value.
+     * @see #replaceFirst(CharSequence, CharSequence)
      */
-    public void substitute(String s) {
-        val = s != null ? s : "";
+    public S changeFirst(CharSequence oldSubstring, CharSequence newSubstring) {
+        val = val.replaceFirst(String.valueOf(oldSubstring), String.valueOf(newSubstring));
+        return this;
+    }
+    
+    /**
+     * Mutable version of the replaceAll method.
+     * Replaces the value of all occurrences matching the given regex with the given replacement.
+     * @param regex The regular expression to which the substrings are to be matched.
+     * @param newSubstring The substring to replace the matches.
+     * @return The same S object, that now has a new value.
+     * @see #replaceAll(String, CharSequence)
+     */
+    public S changeAll(String regex, CharSequence newSubstring) {
+        val = val.replaceAll(regex, String.valueOf(newSubstring));
+        return this;
     }
 
     /**
      * Mutable version of the concat method from native String.
      * Concatenates the given string to the end of the current one.
-     * An optional separator can be passed to be appended between the two strings.
      * @param separator Optional separator to be appended between the strings.
      * @param string The string to be concatenated.
      * @param suffix Optional suffix to be appended after the resulting string.
@@ -362,6 +441,22 @@ public class S implements CharSequence {
     public S lnadd(Object string) {
         return this.add("\n", string, null);
     }
+    
+    /**
+     * Returns the index of the Nth ocurrence of a given substring.
+     * @param string The substring to be searched.
+     * @param ocurrence The Nth match for the substring being searched.
+     */
+    public int indexOfNth(CharSequence string, int ocurrence) {
+    	int indexLastOcurrence = -1;
+    	for (int matches = 0; matches < ocurrence; matches++) {
+    		indexLastOcurrence = val.indexOf(string.toString(), indexLastOcurrence + 1);
+    		if (indexLastOcurrence == -1) {
+    			throw new IllegalArgumentException(f("There are not -- ocurrences of '--' in '--'", ocurrence, string, val));
+    		}
+    	}
+    	return indexLastOcurrence;
+    }
 
     /**
      * Returns a string starting after the given substring until the end.
@@ -372,7 +467,7 @@ public class S implements CharSequence {
     public S from(CharSequence start, Integer occurrence) {
         int index = val.indexOf(start.toString(), 0);
         if (index == -1)
-            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", start, val));
+            throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", start, val));
         if (occurrence == null)
             return new S(val.substring(index + start.length()));
         else {
@@ -382,7 +477,7 @@ public class S implements CharSequence {
             while (count < occurrence) {
                 index = val.indexOf(start.toString(), index + 1);
                 if (index == -1)
-                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, start, val));
+                    throw new IllegalArgumentException(f("Not found -- occurrences of substring '--' in the string '--'", occurrence, start, val));
                 count++;
             }
             return new S(val.substring(index + start.length()));
@@ -406,7 +501,7 @@ public class S implements CharSequence {
     public S until(CharSequence end, Integer occurrence) {
         int index = val.indexOf(end.toString(), 0);
         if (index == -1)
-            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", end, val));
+            throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", end, val));
         if (occurrence == null)
             return new S(val.substring(0, index));
         else {
@@ -416,7 +511,7 @@ public class S implements CharSequence {
             while (count < occurrence) {
                 index = val.indexOf(end.toString(), index + 1);
                 if (index == -1)
-                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, end, val));
+                    throw new IllegalArgumentException(f("Not found -- occurrences of substring '--' in the string '--'", occurrence, end, val));
                 count++;
             }
             return new S(val.substring(0, index));
@@ -440,7 +535,7 @@ public class S implements CharSequence {
     public S frominc(CharSequence start, Integer occurrence) {
         int index = val.indexOf(start.toString(), 0);
         if (index == -1)
-            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", start, val));
+            throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", start, val));
         if (occurrence == null)
             return new S(val.substring(index));
         else {
@@ -450,7 +545,7 @@ public class S implements CharSequence {
             while (count < occurrence) {
                 index = val.indexOf(start.toString(), index + 1);
                 if (index == -1)
-                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, start, val));
+                    throw new IllegalArgumentException(f("Not found -- occurrences of substring '--' in the string '--'", occurrence, start, val));
                 count++;
             }
             return new S(val.substring(index));
@@ -474,7 +569,7 @@ public class S implements CharSequence {
     public S untilinc(CharSequence end, Integer occurrence) {
         int index = val.indexOf(end.toString(), 0);
         if (index == -1)
-            throw new IllegalArgumentException(S.f("The substring '--' was not found in the string '--'", end, val));
+            throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", end, val));
         if (occurrence == null)
             return new S(val.substring(0, index + end.length()));
         else {
@@ -484,7 +579,7 @@ public class S implements CharSequence {
             while (count < occurrence) {
                 index = val.indexOf(end.toString(), index + 1);
                 if (index == -1)
-                    throw new IllegalArgumentException(S.f("Not found -- occurrences of substring '--' in the string '--'", occurrence, end, val));
+                    throw new IllegalArgumentException(f("Not found -- occurrences of substring '--' in the string '--'", occurrence, end, val));
                 count++;
             }
             return new S(val.substring(0, index + end.length()));
@@ -498,7 +593,7 @@ public class S implements CharSequence {
     public S untilinc(CharSequence end) {
         return this.untilinc(end, null);
     }
-
+    
     /**
      * Returns wether the string is equal to any of the given values.
      */
@@ -522,26 +617,32 @@ public class S implements CharSequence {
     }
 
     /**
-     * Returns wether the string is different than all the given values.
+     * @see java.lang.Integer#parseInt(String)
      */
-    public boolean none(CharSequence... strings) {
-        for (CharSequence string : strings) {
-            if (this.equals(string))
-                return false;
-        }
-        return true;
-    }
-
+    public Integer toInt() {
+		return Integer.parseInt(this.val);
+	}
+	
     /**
-     * Returns wether the string is different than all the values in a given collection.
+     * @see java.lang.Long#parseLong(String)
      */
-    public boolean none(Collection<CharSequence> strings) {
-        for (CharSequence string : strings) {
-            if (this.equals(string))
-                return false;
-        }
-        return true;
-    }
+	public Long toLong() {
+		return Long.parseLong(this.val);
+	}
+	
+    /**
+     * @see java.lang.Float#parseFloat(String)
+     */
+	public Float toFloat() {
+		return Float.parseFloat(this.val);
+	}
+	
+    /**
+     * @see java.lang.Double#parseDouble(String)
+     */
+	public Double toDouble() {
+		return Double.parseDouble(this.val);
+	}
 
 
     /* END OF UTILITY METHODS */
