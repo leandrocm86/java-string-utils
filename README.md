@@ -26,7 +26,7 @@ new S("banana apple banana grape banana").from("banana", 1).until("banana", 3) /
 - Easy comparison with multiple elements inline or in a Collection:
 
 ```
-new S("banana").in("apple", "banana", "grape") // gives <i>true</i>
+new S("banana").in("apple", "banana", "grape") // gives true
 ```
 
 - Easy concatanation with spaces or new line:
@@ -35,7 +35,7 @@ new S("banana").in("apple", "banana", "grape") // gives <i>true</i>
 new S("I bought ").adds("apples").adds("and").addln("bananas") // "I bought apples and bananas\n"
 ```
 
-- Easy text formatting with the <i>f</i> method:
+- Easy text formatting with the <i>f</i> method (similar to <i>String.format</i>, but cleaner):
 
 ```
 S.f("Hello, --! There are -- planets nearby...", "world", 9) // "Hello, world! There are 9 planets nearby..."
