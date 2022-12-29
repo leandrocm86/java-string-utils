@@ -464,7 +464,7 @@ public class S implements CharSequence {
      * @param substring The starting substring from which the return is extracted.
      * @param occurrence The Nth occurrence of the substring from which the return is extracted.
      */
-    public S from(CharSequence start, Integer occurrence) {
+    public S startingAfter(CharSequence start, Integer occurrence) {
         int index = val.indexOf(start.toString(), 0);
         if (index == -1)
             throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", start, val));
@@ -488,8 +488,8 @@ public class S implements CharSequence {
      * Returns a string starting after the given substring until the end.
      * @param substring The starting substring from which the return is extracted.
      */
-    public S from(CharSequence start) {
-        return this.from(start, null);
+    public S startingAfter(CharSequence start) {
+        return this.startingAfter(start, null);
     }
 
     /**
@@ -498,7 +498,7 @@ public class S implements CharSequence {
      * @param substring The ending substring up to which the return is extracted.
      * @param occurrence The Nth occurrence of the substring up to which the return is extracted.
      */
-    public S until(CharSequence end, Integer occurrence) {
+    public S endingBefore(CharSequence end, Integer occurrence) {
         int index = val.indexOf(end.toString(), 0);
         if (index == -1)
             throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", end, val));
@@ -522,8 +522,8 @@ public class S implements CharSequence {
      * Returns a string starting from the begining and ending in the given substring.
      * @param substring The ending substring up to which the return is extracted.
      */
-    public S until(CharSequence end) {
-        return this.until(end, null);
+    public S endingBefore(CharSequence end) {
+        return this.endingBefore(end, null);
     }
 
     /**
@@ -532,7 +532,7 @@ public class S implements CharSequence {
      * @param substring The starting substring from which the return is extracted (including this start).
      * @param occurrence The Nth occurrence of the substring from which the return is extracted.
      */
-    public S frominc(CharSequence start, Integer occurrence) {
+    public S startingWith(CharSequence start, Integer occurrence) {
         int index = val.indexOf(start.toString(), 0);
         if (index == -1)
             throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", start, val));
@@ -556,8 +556,8 @@ public class S implements CharSequence {
      * Returns a string starting from the given substring (inclusive) until the end.
      * @param substring The starting substring from which the return is extracted (including this start).
      */
-    public S frominc(CharSequence start) {
-        return this.frominc(start, null);
+    public S startingWith(CharSequence start) {
+        return this.startingWith(start, null);
     }
 
     /**
@@ -566,7 +566,7 @@ public class S implements CharSequence {
      * @param substring The ending substring up to which the return is extracted (including this end).
      * @param occurrence The Nth occurrence of the substring up to which the return is extracted.
      */
-    public S untilinc(CharSequence end, Integer occurrence) {
+    public S endingWith(CharSequence end, Integer occurrence) {
         int index = val.indexOf(end.toString(), 0);
         if (index == -1)
             throw new IllegalArgumentException(f("The substring '--' was not found in the string '--'", end, val));
@@ -590,8 +590,8 @@ public class S implements CharSequence {
      * Returns a string starting from 0 and ending after the given substring.
      * @param substring The ending substring up to which the return is extracted, including this end.
      */
-    public S untilinc(CharSequence end) {
-        return this.untilinc(end, null);
+    public S endingWith(CharSequence end) {
+        return this.endingWith(end, null);
     }
     
     /**

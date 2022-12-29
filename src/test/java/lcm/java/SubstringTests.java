@@ -55,7 +55,7 @@ public class SubstringTests {
     @Test
     void testFrom() {
         S s = new S("acdefabcdefabc");
-        S result = s.from("abc");
+        S result = s.startingAfter("abc");
         assertEquals("acdefabcdefabc", s.toString());
         assertEquals("defabc", result.toString());
     }
@@ -63,8 +63,8 @@ public class SubstringTests {
     @Test
     void testFromNth() {
         S s = new S("abcdefabcdefabc");
-        S result = s.from("abc", 2);
-        S result2 = s.from("abc", 3);
+        S result = s.startingAfter("abc", 2);
+        S result2 = s.startingAfter("abc", 3);
         assertEquals("abcdefabcdefabc", s.toString());
         assertEquals("defabc", result.toString());
         assertEquals("", result2.toString());
@@ -73,7 +73,7 @@ public class SubstringTests {
     @Test
     void testFrominc() {
         S s = new S("acdefabcdefabc");
-        S result = s.frominc("abc");
+        S result = s.startingWith("abc");
         assertEquals("acdefabcdefabc", s.toString());
         assertEquals("abcdefabc", result.toString());
     }
@@ -81,8 +81,8 @@ public class SubstringTests {
     @Test
     void testFromincNth() {
         S s = new S("abcdefabcdefabc");
-        S result = s.frominc("abc", 2);
-        S result2 = s.frominc("abc", 3);
+        S result = s.startingWith("abc", 2);
+        S result2 = s.startingWith("abc", 3);
         assertEquals("abcdefabcdefabc", s.toString());
         assertEquals("abcdefabc", result.toString());
         assertEquals("abc", result2.toString());
@@ -91,7 +91,7 @@ public class SubstringTests {
     @Test
     void testUntil() {
         S s = new S("abcdefabcdefabc");
-        S result = s.until("abc");
+        S result = s.endingBefore("abc");
         assertEquals("abcdefabcdefabc", s.toString());
         assertEquals("", result.toString());
     }
@@ -99,8 +99,8 @@ public class SubstringTests {
     @Test
     void testUntilNth() {
         S s = new S("abcdefabcdefabc");
-        S result = s.until("abc", 2);
-        S result2 = s.until("abc", 3);
+        S result = s.endingBefore("abc", 2);
+        S result2 = s.endingBefore("abc", 3);
         assertEquals("abcdefabcdefabc", s.toString());
         assertEquals("abcdef", result.toString());
         assertEquals("abcdefabcdef", result2.toString());
@@ -109,7 +109,7 @@ public class SubstringTests {
     @Test
     void testUntilinc() {
         S s = new S("abcdefabcdefabc");
-        S result = s.untilinc("abc");
+        S result = s.endingWith("abc");
         assertEquals("abcdefabcdefabc", s.toString());
         assertEquals("abc", result.toString());
     }
@@ -117,8 +117,8 @@ public class SubstringTests {
     @Test
     void testUntilincNth() {
         S s = new S("abcdefabcdefabc");
-        S result = s.untilinc("abc", 2);
-        S result2 = s.untilinc("abc", 3);
+        S result = s.endingWith("abc", 2);
+        S result2 = s.endingWith("abc", 3);
         assertEquals("abcdefabcdefabc", s.toString());
         assertEquals("abcdefabc", result.toString());
         assertEquals("abcdefabcdefabc", result2.toString());
