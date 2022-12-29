@@ -12,47 +12,51 @@ class EndingBeforeBenchmark extends FunctionBenchmark<List<String>, List<String>
 	}
 	
 	void runSingleOccurrence() {
+
+		lastOutput = null;
 		
 		runFunction(strings -> {
 			var output = new ArrayList<String>();
-			strings.forEach(s -> {
-				output.add(new S(s).endingBefore("ZZZ").toString());
-			});
+			strings.forEach(s ->
+				output.add(new S(s).endingBefore("ZZZ").toString())
+			);
 			return output;
 		}, "S.endingBefore ZZZ (SINGLE OCCURRENCE)");
 		
 		runFunction(strings -> {
 			var output = new ArrayList<String>();
-			strings.forEach(s -> {
-				output.add(s.substring(0, s.indexOf("ZZZ")));
-			});
+			strings.forEach(s ->
+				output.add(s.substring(0, s.indexOf("ZZZ")))
+			);
 			return output;
 		}, "INDEXOF ZZZ (SINGLE OCCURRENCE)");
 		
 		runFunction(strings -> {
 			var output = new ArrayList<String>();
-			strings.forEach(s -> {
-				output.add(s.split("ZZZ", 2)[0]);
-			});
+			strings.forEach(s ->
+				output.add(s.split("ZZZ", 2)[0])
+			);
 			return output;
 		}, "SPLIT ZZZ (SINGLE OCCURRENCE)");
 	}
 	
 	void runSecondOccurrence() {
+
+		lastOutput = null;
 		
 		runFunction(strings -> {
 			var output = new ArrayList<String>();
-			strings.forEach(s -> {
-				output.add(new S(s).endingBefore("ZZZ", 2).toString());
-			});
+			strings.forEach(s ->
+				output.add(new S(s).endingBefore("ZZZ", 2).toString())
+			);
 			return output;
 		}, "S.endingBefore ZZZ (2nd OCCURRENCE)");
 		
 		runFunction(strings -> {
 			var output = new ArrayList<String>();
-			strings.forEach(s -> {
-				output.add(s.substring(0, s.indexOf("ZZZ", s.indexOf("ZZZ")+3)));
-			});
+			strings.forEach(s ->
+				output.add(s.substring(0, s.indexOf("ZZZ", s.indexOf("ZZZ")+3)))
+			);
 			return output;
 		}, "INDEXOF ZZZ (2nd OCCURRENCE)");
 		
